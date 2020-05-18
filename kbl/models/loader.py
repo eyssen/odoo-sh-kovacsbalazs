@@ -2,8 +2,8 @@
 
 from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
-
-from os import listdir
+import xmlrpc.client
+import ssl
 
 import logging
 _logger = logging.getLogger(__name__)
