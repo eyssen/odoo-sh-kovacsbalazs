@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+
+
+
+		<!-- Loader -->
+
+		<record id="kbl_loader_form" model="ir.ui.view">
+			<field name="name">kbl.loader.form</field>
+			<field name="model">kbl.loader</field>
+			<field name="arch" type="xml">
+				<form string="Load Data">
+					<sheet>
+						<footer>
+							<button name="load_from_kbl" string="Load from KBL" type="object" class="oe_highlight" />
+							<button name="load_from_kozbeszguru" string="Load from Közbeszguru" type="object" class="oe_highlight" />
+							<button name="load_from_ams" string="Load from AMS" type="object" class="oe_highlight" />
+							or
+							<button string="Cancel" class="oe_link" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+ 		<record id="kbl_loader_action" model="ir.actions.act_window">
+			<field name="name">Loader</field>
+			<field name="res_model">kbl.loader</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="kbl_loader_form" />
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="kbl_loader_action" id="menu_kbl_loader" />
+
+
+
+
+
+	</data>
+</openerp>
