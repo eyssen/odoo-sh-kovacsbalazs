@@ -42,11 +42,11 @@ class KblLoader(models.TransientModel):
             6: 3,
             7: 4,
         }
-        
+
         # project.task
         for oldTask in models.execute_kw(db, uid, password, 'project.task', 'search_read', [[['id', '>', 0]]],
             {'fields': ['id', 'name', 'project_id', 'stage_id', 'sequence']}):
-            Task = self.env['project.task'].search([('x_studio_old_id', '=', oldTask['id'])])
+            Task = self.env['project.task'].search([('old_id', '=', oldTask['id'])])
             if Task:
                 if Task.name != oldTask['name']:
                     Task.name = oldTask['name']
@@ -59,7 +59,7 @@ class KblLoader(models.TransientModel):
             else:
                 self.env['project.task'].create({
                     'company_id': COMPANY_ID,
-                    'x_studio_old_id': oldTask['id'],
+                    'old_id': oldTask['id'],
                     'name': oldTask['name'],
                     'project_id': PROJECT_PROJECT[oldTask['project_id'][0]],
                     'stage_id': PROJECT_TASK_TYPE[oldTask['stage_id'][0]],
