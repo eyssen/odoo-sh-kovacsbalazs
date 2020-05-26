@@ -10,7 +10,7 @@ KBL Addon
     """,
     'category': 'Other',
     'website': 'https://www.eyssen.hu',
-    'depends' : [],
+    'depends' : ['project'],
     'data': [
         'views/project.xml',
         'views/loader.xml',
