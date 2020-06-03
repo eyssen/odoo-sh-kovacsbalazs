@@ -40,5 +40,62 @@
 
 
 
+		<!-- Partner -->
+
+		<record id="res_partner_form_view" model="ir.ui.view">
+			<field name="name">res.partner.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+			
+				<field name="website" position="after">
+					<field name="old_id" />
+				</field>
+
+			</field>
+		</record>
+
+
+
+
+
+		<!-- Task -->
+
+		<record id="project_task_form_view" model="ir.ui.view">
+			<field name="name">project.task.form</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_form2" />
+			<field name="arch" type="xml">
+			
+				<field name="user_id" position="after">
+					<field name="old_id" />
+				</field>
+
+			</field>
+		</record>
+
+
+
+
+
+		<!-- User -->
+
+		<record id="res_users_form_view" model="ir.ui.view">
+			<field name="name">res.users.form</field>
+			<field name="model">res.users</field>
+			<field name="inherit_id" ref="base.view_users_form" />
+			<field name="arch" type="xml">
+			
+				<field name="name" position="after">
+					<field name="old_id" />
+				</field>
+
+			</field>
+		</record>
+
+
+
+
+
 	</data>
 </openerp>

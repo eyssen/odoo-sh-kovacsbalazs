@@ -12,10 +12,9 @@ KBL Addon
     'website': 'https://www.eyssen.hu',
     'depends' : ['base', 'project'],
     'data': [
-        'views/loader.xml',
-        'views/partner.xml',
+        'security/ir.model.access.csv',
         'views/project.xml',
-        'views/user.xml',
+        'views/loader.xml',
     ],
     'qweb': [],
     'installable': True,

@@ -14,9 +14,33 @@
 			<field name="inherit_id" ref="project.view_task_form2" />
 			<field name="arch" type="xml">
 			
+				<field name="partner_id" position="replace" />
+
 				<field name="user_id" position="after">
-					<field name="old_id" />
+					<field name="project_name" invisible="1" />
+					<field name="partner_id" string="Szerződött partner" />
+					<field name="next_step" />
+					<field name="weekly_notofy_emails"
+						attrs="{'invisible':[('project_name', 'not in', ('Ügyvédi tanácsadás'))]}" />
 				</field>
+
+				<field name="date_deadline" position="after">
+					<field name="invoice_plan_date" />
+				</field>
+				
+				<notebook>
+					<page string="Tevékenységek"
+						attrs="{'invisible':[('project_name', 'not in', ('Ügyvédi tanácsadás'))]}">
+						<group>
+							<field name="progress_ids" nolabel="1">
+								<tree editable="bottom">
+									<field name="date" />
+									<field name="name" />
+								</tree>
+							</field>
+						</group>
+					</page>
+				</notebook>
 
 			</field>
 		</record>
