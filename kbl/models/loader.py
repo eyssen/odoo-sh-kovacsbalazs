@@ -212,8 +212,11 @@ class KblLoader(models.TransientModel):
                     Progress.create_date = oldProgress['create_date']
                 if Progress.write_date != oldProgress['write_date']:
                     Progress.write_date = oldProgress['write_date']
+                if Progress.company_id != 1:
+                    Progress.company_id = 1
             else:
                 vals = {
+                    'company_id': COMPANY_ID,
                     'old_id': oldProgress['id'],
                     'name': oldProgress['name'],
                     'task_id': self.env['project.task'].search([('old_id', '=', oldProgress['task_id'][0])], limit=1).id,

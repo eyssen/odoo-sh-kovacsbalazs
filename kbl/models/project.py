@@ -50,6 +50,7 @@ class ProjectTaskProgress(models.Model):
     _order = 'task_id, date'
 
 
+    company_id = fields.Many2one('res.company', 'Company', index=True)
     name = fields.Char(u'Leírás', required=True)
     task_id = fields.Many2one('project.task', u'Feladat', required=True)
     date = fields.Date(u'Dátum', required=True)
