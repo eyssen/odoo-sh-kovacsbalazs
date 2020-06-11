@@ -18,7 +18,7 @@ class KblLoader(models.TransientModel):
 
 
     def load_from_kbl(self):
-        _logger.info('== load_from_kbl ==')
+        _logger.info('===== load_from_kbl =====')
         
         # Server variables
         url = 'https://kbl-legal.odoo.com'
@@ -199,39 +199,39 @@ class KblLoader(models.TransientModel):
                 self.env['project.task'].create(vals)
         _logger.info("== END KBL Task ==")
         
-        # project.task.progress
-        _logger.info("== START KBL Tevékenységek ==")
-        for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
-            {'fields': ['id', 'name', 'task_id', 'date', 'create_date', 'write_date']}):
-            Progress = self.env['project.task.progress'].search([('old_id', '=', oldProgress['id'])])
-            if Progress:
-                if Progress.name != oldProgress['name']:
-                    Progress.name = oldProgress['name']
-                if Progress.date != oldProgress['date']:
-                    Progress.date = oldProgress['date']
-                if Progress.create_date != oldProgress['create_date']:
-                    Progress.create_date = oldProgress['create_date']
-                if Progress.write_date != oldProgress['write_date']:
-                    Progress.write_date = oldProgress['write_date']
-                if Progress.company_id != COMPANY_ID:
-                    Progress.company_id = COMPANY_ID
-            else:
-                vals = {
-                    'company_id': COMPANY_ID,
-                    'old_id': oldProgress['id'],
-                    'name': oldProgress['name'],
-                    'task_id': self.env['project.task'].search([('old_id', '=', oldProgress['task_id'][0])], limit=1).id,
-                    'date': oldProgress['date'],
-                    'create_date': oldProgress['create_date'],
-                    'write_date': oldProgress['write_date'],
-                }
-                if vals['task_id']:
-                    self.env['project.task.progress'].create(vals)
-        _logger.info("== END KBL Tevékenységek ==")
+#         # project.task.progress
+#         _logger.info("== START KBL Tevékenységek ==")
+#         for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
+#             {'fields': ['id', 'name', 'task_id', 'date', 'create_date', 'write_date']}):
+#             Progress = self.env['project.task.progress'].search([('old_id', '=', oldProgress['id'])])
+#             if Progress:
+#                 if Progress.name != oldProgress['name']:
+#                     Progress.name = oldProgress['name']
+#                 if Progress.date != oldProgress['date']:
+#                     Progress.date = oldProgress['date']
+#                 if Progress.create_date != oldProgress['create_date']:
+#                     Progress.create_date = oldProgress['create_date']
+#                 if Progress.write_date != oldProgress['write_date']:
+#                     Progress.write_date = oldProgress['write_date']
+#                 if Progress.company_id != COMPANY_ID:
+#                     Progress.company_id = COMPANY_ID
+#             else:
+#                 vals = {
+#                     'company_id': COMPANY_ID,
+#                     'old_id': oldProgress['id'],
+#                     'name': oldProgress['name'],
+#                     'task_id': self.env['project.task'].search([('old_id', '=', oldProgress['task_id'][0])], limit=1).id,
+#                     'date': oldProgress['date'],
+#                     'create_date': oldProgress['create_date'],
+#                     'write_date': oldProgress['write_date'],
+#                 }
+#                 if vals['task_id']:
+#                     self.env['project.task.progress'].create(vals)
+#         _logger.info("== END KBL Tevékenységek ==")
 
 
     def load_from_kozbeszguru(self):
-        _logger.info('== load_from_kozbeszguru ==')
+        _logger.info('===== load_from_kozbeszguru =====')
         
         # Server variables
         url = 'https://www.kozbeszguru.hu'
@@ -442,35 +442,35 @@ class KblLoader(models.TransientModel):
                 self.env['project.task'].create(vals)
         _logger.info("== END Guru Task ==")
         
-        # project.task.progress
-        _logger.info("== START Guru Tevékenységek ==")
-        for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
-            {'fields': ['id', 'name', 'task_id', 'date', 'create_date', 'write_date']}):
-            Progress = self.env['project.task.progress'].search([('old_id', '=', oldProgress['id'])])
-            if Progress:
-                if Progress.name != oldProgress['name']:
-                    Progress.name = oldProgress['name']
-                if Progress.date != oldProgress['date']:
-                    Progress.date = oldProgress['date']
-                if Progress.create_date != oldProgress['create_date']:
-                    Progress.create_date = oldProgress['create_date']
-                if Progress.write_date != oldProgress['write_date']:
-                    Progress.write_date = oldProgress['write_date']
-                if Progress.company_id.id != COMPANY_ID:
-                    Progress.company_id = COMPANY_ID
-            else:
-                vals = {
-                    'company_id': COMPANY_ID,
-                    'old_id': oldProgress['id'],
-                    'name': oldProgress['name'],
-                    'task_id': self.env['project.task'].search([('old_id', '=', oldProgress['task_id'][0])], limit=1).id,
-                    'date': oldProgress['date'],
-                    'create_date': oldProgress['create_date'],
-                    'write_date': oldProgress['write_date'],
-                }
-                if vals['task_id']:
-                    self.env['project.task.progress'].create(vals)
-        _logger.info("== END Guru Tevékenységek ==")
+#         # project.task.progress
+#         _logger.info("== START Guru Tevékenységek ==")
+#         for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
+#             {'fields': ['id', 'name', 'task_id', 'date', 'create_date', 'write_date']}):
+#             Progress = self.env['project.task.progress'].search([('old_id', '=', oldProgress['id'])])
+#             if Progress:
+#                 if Progress.name != oldProgress['name']:
+#                     Progress.name = oldProgress['name']
+#                 if Progress.date != oldProgress['date']:
+#                     Progress.date = oldProgress['date']
+#                 if Progress.create_date != oldProgress['create_date']:
+#                     Progress.create_date = oldProgress['create_date']
+#                 if Progress.write_date != oldProgress['write_date']:
+#                     Progress.write_date = oldProgress['write_date']
+#                 if Progress.company_id.id != COMPANY_ID:
+#                     Progress.company_id = COMPANY_ID
+#             else:
+#                 vals = {
+#                     'company_id': COMPANY_ID,
+#                     'old_id': oldProgress['id'],
+#                     'name': oldProgress['name'],
+#                     'task_id': self.env['project.task'].search([('old_id', '=', oldProgress['task_id'][0])], limit=1).id,
+#                     'date': oldProgress['date'],
+#                     'create_date': oldProgress['create_date'],
+#                     'write_date': oldProgress['write_date'],
+#                 }
+#                 if vals['task_id']:
+#                     self.env['project.task.progress'].create(vals)
+#         _logger.info("== END Guru Tevékenységek ==")
 
 
     def load_from_ams(self):
