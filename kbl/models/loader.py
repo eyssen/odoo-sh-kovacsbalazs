@@ -18,6 +18,7 @@ class KblLoader(models.TransientModel):
 
 
     def load_from_kbl(self):
+        _logger.info('== load_from_kbl ==')
         
         # Server variables
         url = 'https://kbl-legal.odoo.com'
@@ -230,6 +231,7 @@ class KblLoader(models.TransientModel):
 
 
     def load_from_kozbeszguru(self):
+        _logger.info('== load_from_kozbeszguru ==')
         
         # Server variables
         url = 'https://www.kozbeszguru.hu'
