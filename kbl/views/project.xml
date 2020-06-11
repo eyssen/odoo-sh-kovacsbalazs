@@ -8,7 +8,7 @@
 
 		<!-- Task -->
 
-		<record id="project_task_form_view" model="ir.ui.view">
+		<record id="kbl_project_task_form_view" model="ir.ui.view">
 			<field name="name">project.task.form</field>
 			<field name="model">project.task</field>
 			<field name="inherit_id" ref="project.view_task_form2" />
