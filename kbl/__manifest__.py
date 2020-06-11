@@ -12,6 +12,7 @@ KBL Addon
     'website': 'https://www.eyssen.hu',
     'depends' : ['base', 'project'],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/project.xml',
         'views/loader.xml',
