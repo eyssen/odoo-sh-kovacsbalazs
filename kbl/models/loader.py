@@ -397,8 +397,9 @@ class KblLoader(models.TransientModel):
             if Task:
                 if Task.name != oldTask['name']:
                     Task.name = oldTask['name']
-                if Task.project_id.id != PROJECT_PROJECT[oldTask['project_id'][0]]:
-                    Task.project_id = PROJECT_PROJECT[oldTask['project_id'][0]]
+                if oldTask['project_id']:
+                    if Task.project_id.id != PROJECT_PROJECT[oldTask['project_id'][0]]:
+                        Task.project_id = PROJECT_PROJECT[oldTask['project_id'][0]]
                 if Task.stage_id.id != PROJECT_TASK_TYPE[oldTask['stage_id'][0]]:
                     Task.stage_id = PROJECT_TASK_TYPE[oldTask['stage_id'][0]]
                 if Task.sequence != oldTask['sequence']:
@@ -453,7 +454,7 @@ class KblLoader(models.TransientModel):
                     Progress.create_date = oldProgress['create_date']
                 if Progress.write_date != oldProgress['write_date']:
                     Progress.write_date = oldProgress['write_date']
-                if Progress.company_id != COMPANY_ID:
+                if Progress.company_id.id != COMPANY_ID:
                     Progress.company_id = COMPANY_ID
             else:
                 vals = {
