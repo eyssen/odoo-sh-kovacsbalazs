@@ -16,9 +16,13 @@
 					<sheet>
 						<footer>
 							<button name="load_from_kbl" string="Load from KBL" type="object" class="oe_highlight" />
+							<br/>
 							<button name="load_from_kozbeszguru" string="Load from Közbeszguru" type="object" class="oe_highlight" />
+							<button name="load_from_kozbeszguru_files" string="Load from Közbeszguru (files)" type="object" class="oe_highlight" />
+							<br/>
 							<button name="load_from_ams" string="Load from AMS" type="object" class="oe_highlight" />
-							or
+							<br/>
+							<br/>
 							<button string="Cancel" class="oe_link" special="cancel" />
 						</footer>
 					</sheet>
