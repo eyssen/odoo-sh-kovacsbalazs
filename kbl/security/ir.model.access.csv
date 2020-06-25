@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_task_progress_user,project.task.progress.user,model_project_task_progress,project.group_project_user,1,1,1,0
+access_project_task_progress_manager,project.task.progress.manager,model_project_task_progress,project.group_project_manager,1,1,1,0
+access_project_task_wage_user,project.task.wage.user,model_project_task_wage,project.group_project_user,1,1,1,0
+access_project_task_wage_manager,project.task.wage.manager,model_project_task_wage,project.group_project_manager,1,1,1,0
+access_project_task_meeting_log_user,project.task.meeting.log.user,model_project_task_meeting_log,project.group_project_user,1,1,1,0
+access_project_task_meeting_log_manager,project.task.meeting.log.manager,model_project_task_meeting_log,project.group_project_manager,1,1,1,0
+access_project_task_procedure_type_user,project.task.procedure.type.user,model_project_task_procedure_type,project.group_project_user,1,1,1,0
+access_project_task_procedure_type_manager,project.task.procedure.type.manager,model_project_task_procedure_type,project.group_project_manager,1,1,1,0

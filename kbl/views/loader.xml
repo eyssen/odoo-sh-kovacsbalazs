@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+
+
+
+		<!-- Loader -->
+
+		<record id="kbl_loader_form" model="ir.ui.view">
+			<field name="name">kbl.loader.form</field>
+			<field name="model">kbl.loader</field>
+			<field name="arch" type="xml">
+				<form string="Load Data">
+					<sheet>
+						<footer>
+							<button name="load_from_kbl" string="Load from KBL" type="object" class="oe_highlight" />
+							<br/>
+							<button name="load_from_kozbeszguru" string="Load from Közbeszguru" type="object" class="oe_highlight" />
+							<button name="load_from_kozbeszguru_files" string="Load from Közbeszguru (files)" type="object" class="oe_highlight" />
+							<br/>
+							<button name="load_from_ams" string="Load from AMS" type="object" class="oe_highlight" />
+							<br/>
+							<br/>
+							<button string="Cancel" class="oe_link" special="cancel" />
+						</footer>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+ 		<record id="kbl_loader_action" model="ir.actions.act_window">
+			<field name="name">Loader</field>
+			<field name="res_model">kbl.loader</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="kbl_loader_form" />
+			<field name="target">new</field>
+		</record>
+
+		<menuitem action="kbl_loader_action" id="menu_kbl_loader" />
+
+
+
+
+
+		<!-- Partner -->
+
+		<record id="res_partner_form_view" model="ir.ui.view">
+			<field name="name">res.partner.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form" />
+			<field name="arch" type="xml">
+			
+				<field name="website" position="after">
+					<field name="old_id" />
+				</field>
+
+			</field>
+		</record>
+
+
+
+
+
+		<!-- Task -->
+
+		<record id="project_task_form_view" model="ir.ui.view">
+			<field name="name">project.task.form</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="project.view_task_form2" />
+			<field name="arch" type="xml">
+			
+				<field name="user_id" position="after">
+					<field name="old_id" />
+				</field>
+
+			</field>
+		</record>
+
+
+
+
+
+		<!-- User -->
+
+		<record id="res_users_form_view" model="ir.ui.view">
+			<field name="name">res.users.form</field>
+			<field name="model">res.users</field>
+			<field name="inherit_id" ref="base.view_users_form" />
+			<field name="arch" type="xml">
+			
+				<field name="name" position="after">
+					<field name="old_id" />
+				</field>
+
+			</field>
+		</record>
+
+
+
+
+
+	</data>
+</openerp>
