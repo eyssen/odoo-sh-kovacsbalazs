@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+
+
+
+
+		<!-- Order Form -->
+
+        <record id="view_task_form_inherited_aal" model="ir.ui.view">
+            <field name="name">project.task.form.inherited.aal</field>
+            <field name="model">project.task</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr_timesheet.view_task_form2_inherited"/>
+            <field name="arch" type="xml">
+
+
+        		<field name="unit_amount" position="before">
+        			<field name="coa" />
+					<field name="foreign_language" />
+        			<field name="include_in_customer" />
+					<field name="include_in_colleaggue" />
+        		</field>
+
+                                
+            </field>
+        </record>
+
+
+
+
+
+    </data>
+</openerp>

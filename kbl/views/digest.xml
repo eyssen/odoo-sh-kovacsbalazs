@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+
+
+
+
+    <record id="digest_digest_view_form" model="ir.ui.view">
+        <field name="name">digest.digest.view.form.inherit.kozbeszguru</field>
+        <field name="model">digest.digest</field>
+        <field name="inherit_id" ref="digest.digest_digest_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//group[@name='kpi_general']" position="after">
+                <group name="kpi_kozbeszguru" string="Közbeszguru" groups="project.group_project_user">
+                    <field name="kpi_project_task_kozbesz_elokeszites" />
+                    <field name="kpi_project_task_kozbesz_folyamatban" />
+                    <field name="kpi_project_task_kozbesz_lezart" />
+                    <field name="kpi_project_task_kff_folyamatban" />
+                    <field name="kpi_project_task_kff_lezart" />
+                    <field name="kpi_project_task_egyeb_folyamatban" />
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+
+
+
+
+
+</odoo>

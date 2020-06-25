@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+
+
+
+
+		<!-- Employee -->
+
+		<record id="view_employee_form" model="ir.ui.view">
+			<field name="name">hr.employee.form</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//group[@name='identification_group']" position="inside">
+					<field name="auto_attendance" />
+					<field name="guru_attendance" />
+				</xpath>
+				
+				<notebook>
+					<page string="Teljesítménybér">
+						<group>
+							<group>
+								<field name="basic_wage" widget="monetary" />
+								<field name="wage_multiplier" />
+							</group>
+							<group>
+								<field name="balance_previous" widget="monetary" />
+								<field name="balance_start"  widget="monetary" />
+							</group>
+						</group>
+						<group>
+							<field name="wage_ids" nolabel="1">
+								<tree editable="bottom">
+									<field name="date" />
+									<field name="sum" />
+									<field name="payable" />
+								</tree>
+							</field>
+						</group>
+					</page>
+				</notebook>
+				
+			</field>
+		</record>
+		
+		
+
+
+		
+		<!-- Employee Wage -->
+		<record id="view_employee_wage_form" model="ir.ui.view">
+			<field name="name">hr.employee.wage.form</field>
+			<field name="model">hr.employee.wage</field>
+			<field name="arch" type="xml">
+				<form string="Teljesítménybér elszámolás">
+					<group>
+						<group>
+							<field name="employee_id" />
+							<field name="date" />
+							<field name="accounting_period_start" />
+							<field name="accounting_period_end" />
+							<field name="sum" widget="monetary" />
+							<field name="payable" widget="monetary" />
+						</group>
+						<group>
+							<field name="previous_sum" widget="monetary" />
+							<field name="grand_total" widget="monetary" />
+							<field name="basic_wage" widget="monetary" />
+							<field name="next_base" widget="monetary" />
+						</group>
+						<field name="wage_ids">
+							<tree>
+								<field name="wage" />
+								<field name="comment" />
+								<field name="amount" />
+								<field name="task_id" />
+							</tree>
+						</field>
+					</group>
+				</form>
+			</field>
+		</record>
+
+
+
+
+
+		<!-- Employee Wahe Dashboard -->
+
+        <record id="employee_wage_view_graph" model="ir.ui.view">
+            <field name="name">hr.employee.wage.view.graph</field>
+            <field name="model">hr.employee.wage</field>
+            <field name="arch" type="xml">
+                <graph string="Teljesítménybér elszámolások">
+                    <field name="employee_id" type="row"/>
+                    <field name="date" type="col"/>
+                    <field name="payable" string="Összeg" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="employee_wage_view_pivot" model="ir.ui.view">
+            <field name="name">hr.employee.wage.view.pivot</field>
+            <field name="model">hr.employee.wage</field>
+            <field name="arch" type="xml">
+                <pivot string="Teljesítménybér elszámolások" disable_linking="True">
+                    <field name="employee_id" type="row"/>
+                    <field name="date" type="col"/>
+                    <field name="payable" string="Összeg" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="employee_wage_view_cohort" model="ir.ui.view">
+            <field name="name">hr.employee.wage.view.cohort</field>
+            <field name="model">hr.employee.wage</field>
+            <field name="arch" type="xml">
+                <cohort string="Teljesítménybér elszámolások" date_start="accounting_period_start" date_stop="accounting_period_end" interval="month" mode="churn" />
+            </field>
+        </record>
+
+        <record id="employee_wage_view_dashboard" model="ir.ui.view">
+            <field name="name">hr.employee.wage.view.dashboard.lead</field>
+            <field name="model">hr.employee.wage</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <dashboard>
+                    <view type="graph" ref="kozbeszguru.employee_wage_view_graph"/>
+                    <group>
+		                <group>
+		                	<aggregate name="wage_count" string="Elszámolások száma" group_operator="count_distinct" field="id" value_label="db" />
+		                	<aggregate name="user_count" string="Alkalmazottak száma" group_operator="count_distinct" field="employee_id" value_label="db" />
+		                	<aggregate name="min" string="Legkisebb elszámolás" group_operator="min" field="payable" widget="monetary" />
+		                	<aggregate name="max" string="Legnagyobb elszámolás" group_operator="max" field="payable" widget="monetary" />
+		                	<aggregate name="avg" string="Átlag elszámolás" group_operator="avg" field="payable" widget="monetary" />
+		                	<aggregate name="grandtotal" string="Összes elszámolás" field="payable" widget="monetary" />
+		                </group>
+		                <group col="1">
+		                	<widget name="pie_chart" title="Alkalmazottak" attrs="{'groupby': 'employee_id'}" />
+		                	<widget name="pie_chart" title="Hónapok" attrs="{'groupby': 'date'}" />
+		                </group>
+                    </group>
+                    <view type="pivot" ref="kozbeszguru.employee_wage_view_pivot"/>
+                    <view type="cohort" ref="kozbeszguru.employee_wage_view_cohort"/>
+                </dashboard>
+            </field>
+        </record>
+
+        <record id="action_employee_wage_report" model="ir.actions.act_window">
+            <field name="name">Teljesítménybér elszámolások</field>
+            <field name="res_model">hr.employee.wage</field>
+            <field name="view_mode">dashboard,pivot,graph</field>
+            <field name="domain">[]</field>
+            <field name="context" eval="{'time_ranges': {'field':'date', 'range':'last_365_days'}}"/>
+        </record>
+
+		<menuitem name="Teljesítménybér elszámolások" id="employee_wage_report_menu"
+			parent="project.menu_project_report" action="action_employee_wage_report"/>
+
+
+
+
+
+	</data>
+</openerp>
