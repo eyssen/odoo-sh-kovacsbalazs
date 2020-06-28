@@ -9,3 +9,5 @@ access_project_task_procedure_type_user,project.task.procedure.type.user,model_p
 access_project_task_procedure_type_manager,project.task.procedure.type.manager,model_project_task_procedure_type,project.group_project_manager,1,1,1,0
 access_hr_employee_wage_user,hr.employee.wage.user,model_hr_employee_wage,hr.group_hr_user,1,1,1,0
 access_hr_employee_wage_manager,hr.employee.wage.type.manager,model_hr_employee_wage,hr.group_hr_manager,1,1,1,0
+access_project_task_kmok_state_user,project.task.kmok.state.user,model_project_task_kmok_state,project.group_project_user,1,1,1,0
+access_project_task_kmok_state_manager,project.task.kmok.state.manager,model_project_task_kmok_state,project.group_project_manager,1,1,1,0

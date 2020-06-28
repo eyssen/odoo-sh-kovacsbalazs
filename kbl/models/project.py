@@ -395,6 +395,7 @@ class ProjectTaskMeetingLog(models.Model):
     _name = 'project.task.meeting.log'
     
     
+    company_id = fields.Many2one('res.company', 'Company', index=True)
     task_id = fields.Many2one(u'Task', required=True)
     name = fields.Char(u'Tárgyalás tárgya', required=True)
     date = fields.Date(u'Tárgyalás időpontja', required=True)
@@ -423,6 +424,7 @@ class ProjectTaskWage(models.Model):
     _order = 'user_id, project_id, task_id'
     
     
+    company_id = fields.Many2one('res.company', 'Company', index=True)
     task_id = fields.Many2one('project.task', u'Feladat', readonly=True)
     project_id = fields.Many2one('project.project', related='task_id.project_id', store=True, readonly=True)
     user_id = fields.Many2one('res.users', u'Tanácsadó', readonly=True)

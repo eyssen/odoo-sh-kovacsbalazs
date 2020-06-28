@@ -105,6 +105,7 @@ class HrEmployeeWage(models.Model):
     _name = 'hr.employee.wage'
 
 
+    company_id = fields.Many2one('res.company', 'Company', index=True)
     employee_id = fields.Many2one('hr.employee', readonly=True)
     date = fields.Date(u'Elszámolás időpontja', default=fields.Date.today(), readonly=True)
     state = fields.Selection([('creating', 'Creating'), ('created', 'Created')], default='creating', readonly=True)
