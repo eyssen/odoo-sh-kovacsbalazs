@@ -405,7 +405,7 @@ class KblLoader(models.TransientModel):
          
         # project.task
         _logger.info("== START Guru Task ==")
-        for oldTask in models.execute_kw(db, uid, password, 'project.task', 'search_read', [   , ['id', '>', 0]]],
+        for oldTask in models.execute_kw(db, uid, password, 'project.task', 'search_read', [[['project_id', 'not in', [12, 14]], ['id', '>', 0]]],
             {'fields': [
                 'id',
                 'name',
