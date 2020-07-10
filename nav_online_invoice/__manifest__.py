@@ -13,6 +13,7 @@
     'data': [
         'views/account_invoice_form.xml',
         'views/account_payment_term_form.xml',
+        'views/company.xml',
         'views/res_config_settings_views.xml',
         'views/nav_invoice.xml',
         'views/uom.xml',

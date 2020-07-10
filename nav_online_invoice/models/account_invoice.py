@@ -115,8 +115,7 @@ class AccountMove(models.Model):
             self.nav_message = ret[1]
             return ret
 
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        nav_api_url = get_param('nav_online_invoice.nav_api_url')
+        nav_api_url = self.company_id.nav_api_url
 
         request = self.baseXml('QueryTransactionStatusRequest')
         etree.SubElement(request, "transactionId").text = self.nav_transaction_id
@@ -157,8 +156,7 @@ class AccountMove(models.Model):
             self.nav_message = "nincs beküldve"
             return
         
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        nav_api_url = get_param('nav_online_invoice.nav_api_url')
+        nav_api_url = self.company_id.nav_api_url
 
         request = self.baseXml('QueryInvoiceDataRequest')
         #etree.SubElement(request, "page").text = '1'
@@ -184,8 +182,7 @@ class AccountMove(models.Model):
 
     def manageInvoice(self, token, invoice_xml, operation="CREATE"):
         ret = ("", "")
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        nav_api_url = get_param('nav_online_invoice.nav_api_url')
+        nav_api_url = self.company_id.nav_api_url
         base64_invoice = b64encode(invoice_xml)
 
         request = self.baseXml('ManageInvoiceRequest', base64_invoice)
@@ -224,8 +221,7 @@ class AccountMove(models.Model):
 
     def requestExchangeToken(self):
         ret = ("","")
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        nav_api_url = get_param('nav_online_invoice.nav_api_url')
+        nav_api_url = self.company_id.nav_api_url
 
         request = self.baseXml('TokenExchangeRequest')
         xml = self.getXmlString(request)
@@ -249,8 +245,7 @@ class AccountMove(models.Model):
 
 
     def decryptToken(self, token):
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        exchangeKey = get_param('nav_online_invoice.nav_exchange_key')
+        exchangeKey = self.company_id.nav_exchange_key
 
         unpad = lambda s: s[:-ord(s[len(s) - 1:])]
 
@@ -279,8 +274,7 @@ class AccountMove(models.Model):
 
 
     def baseXml(self, rootTag, base64_invoice = None):
-        get_param = self.env['ir.config_parameter'].sudo().get_param
-        signKey = get_param('nav_online_invoice.nav_sign_key')
+        signKey = self.company_id.nav_sign_key
 
         root = etree.Element(rootTag, xmlns='http://schemas.nav.gov.hu/OSA/2.0/api')
         requestId = self.generateRequestId()
@@ -293,8 +287,8 @@ class AccountMove(models.Model):
         etree.SubElement(header, "headerVersion").text = "1.0"
 
         user = etree.SubElement(root, "user")
-        etree.SubElement(user, "login").text = get_param('nav_online_invoice.nav_user')
-        etree.SubElement(user, "passwordHash").text = self.sha512(get_param('nav_online_invoice.nav_pass'))
+        etree.SubElement(user, "login").text = self.company_id.nav_user
+        etree.SubElement(user, "passwordHash").text = self.sha512(self.company_id.nav_pass)
         etree.SubElement(user, "taxNumber").text = str(self.company_id.partner_id.vat_hu.split('-')[0])
         etree.SubElement(user, "requestSignature").text = self.generateSignatureHash(requestId, timestamp, signKey, rootTag, base64_invoice)
 
