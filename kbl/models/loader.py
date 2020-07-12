@@ -43,6 +43,26 @@ class KblLoader(models.TransientModel):
             6: 3,
             7: 4,
         }
+        BLOG = {
+            1: 1,
+        }
+        BLOG_TAG = {
+            7: 1,
+            5: 2,
+            16: 3,
+            4: 4,
+            14: 5,
+            6: 6,
+            3: 7,
+            12: 8,
+            10: 9,
+            13: 10,
+            1: 11,
+            8: 12,
+            11: 13,
+            15: 14,
+            2: 15,
+        }
         
         # res.partner
         _logger.info("== START KBL Partner ==")
@@ -144,7 +164,7 @@ class KblLoader(models.TransientModel):
                         vals['parent_id'] = ParentId.id
                     self.env['res.partner'].create(vals)
         _logger.info("== END KBL Partner ==")
-        
+         
         # project.task
         _logger.info("== START KBL Task ==")
         for oldTask in models.execute_kw(db, uid, password, 'project.task', 'search_read', [[['id', '>', 0]]],
@@ -198,7 +218,7 @@ class KblLoader(models.TransientModel):
                     vals['partner_id'] = Partner.id
                 self.env['project.task'].create(vals)
         _logger.info("== END KBL Task ==")
-        
+         
         # project.task.progress
         _logger.info("== START KBL Tevékenységek ==")
         for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
@@ -226,6 +246,61 @@ class KblLoader(models.TransientModel):
                 if vals['task_id']:
                     self.env['project.task.progress'].create(vals)
         _logger.info("== END KBL Tevékenységek ==")
+
+        # blog.post
+        _logger.info("== START KBL Blog ==")
+        for oldBlog in models.execute_kw(db, uid, password, 'blog.post', 'search_read', [[['id', '>', 0]]],
+            {'fields': [
+                'id',
+                'website_meta_title',
+                'website_meta_description',
+                'website_meta_keywords',
+                'is_published',
+                'name',
+                'subtitle',
+                'author_id',
+                'active',
+                'cover_properties',
+                'blog_id',
+                'content',
+                'teaser_manual',
+                'create_date',
+                'published_date',
+                'post_date',
+                'write_date',
+                'visits',
+                'tag_ids',
+            ]}):
+            Blog = self.env['blog.post'].search([('company_id', '=', COMPANY_ID), ('old_id', '=', oldBlog['id'])])
+            if Blog:
+                Blog.visits = oldBlog['visits']
+            else:
+                vals = {
+                    'company_id': COMPANY_ID,
+                    'old_id': oldBlog['id'],
+                    'website_meta_title': oldBlog['website_meta_title'],
+                    'website_meta_description': oldBlog['website_meta_description'],
+                    'website_meta_keywords': oldBlog['website_meta_keywords'],
+                    'is_published': oldBlog['is_published'],
+                    'name': oldBlog['name'],
+                    'subtitle': oldBlog['subtitle'],
+                    'author_id': self.env['res.partner'].search([('company_id', '=', COMPANY_ID), ('old_id', '=', oldBlog['author_id'][0])], limit=1).id,
+                    'active': oldBlog['active'],
+                    'cover_properties': oldBlog['cover_properties'],
+                    'blog_id': BLOG[oldBlog['blog_id'][0]],
+                    'content': oldBlog['content'],
+                    'teaser_manual': oldBlog['teaser_manual'],
+                    'create_date': oldBlog['create_date'],
+                    'published_date': oldBlog['published_date'],
+                    'post_date': oldBlog['post_date'],
+                    'write_date': oldBlog['write_date'],
+                    'visits': oldBlog['visits'],
+                }
+                Blog = self.env['blog.post'].create(vals)
+                for tag_id in oldBlog['tag_ids']:
+                    sql = "INSERT INTO blog_post_blog_tag_rel (blog_tag_id, blog_post_id) VALUES (%s, %s);"
+                    self.env.cr.execute(sql, [BLOG_TAG[tag_id], Blog.id])
+        _logger.info("== END KBL Blog ==")
 
 
     def load_from_kozbeszguru(self):
@@ -1125,3 +1200,15 @@ class ProjectTaskMeetingLog(models.Model):
 
     
     old_id = fields.Integer(u'Régi Odoo azonosító')
+
+
+
+
+
+class BlogPost(models.Model):
+    
+    _inherit = 'blog.post'
+
+    
+    old_id = fields.Integer(u'Régi Odoo azonosító')
+    company_id = fields.Many2one('res.company', 'Company', index=True)

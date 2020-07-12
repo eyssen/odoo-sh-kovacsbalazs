@@ -10,7 +10,7 @@ KBL Addon
     """,
     'category': 'Other',
     'website': 'https://www.eyssen.hu',
-    'depends' : ['base', 'project'],
+    'depends' : ['base', 'project', 'website_blog'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
