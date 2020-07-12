@@ -399,6 +399,7 @@ class KblLoader(models.TransientModel):
             19: 34,
             18: 34,
             20: 35,
+            21: 32,
         }
         
         # res.partner
