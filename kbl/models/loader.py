@@ -372,6 +372,34 @@ class KblLoader(models.TransientModel):
             12: 21,
             30: 22,
         }
+        BLOG = {
+            1: 2,
+            2: 3,
+        }
+        BLOG_TAG = {
+            8: 16,
+            5: 17,
+            14: 18,
+            16: 19,
+            3: 20,
+            7: 21,
+            1: 6,
+            10: 22,
+            13: 23,
+            24: 24,
+            9: 25,
+            2: 26,
+            12: 27,
+            11: 28,
+            6: 29,
+            15: 30,
+            22: 31,
+            31: 32,
+            17: 33,
+            19: 34,
+            18: 34,
+            20: 35,
+        }
         
         # res.partner
         _logger.info("== START Guru Partner ==")
@@ -1028,6 +1056,61 @@ class KblLoader(models.TransientModel):
                     vals['employee_wage_id'] = self.env['hr.employee.wage'].search([('old_id', '=', oldWage['employee_wage_id'][0])], limit=1).id
                 self.env['project.task.wage'].create(vals)
         _logger.info("== END Guru Task Wage ==")
+
+        # blog.post
+        _logger.info("== START Guru Blog ==")
+        for oldBlog in models.execute_kw(db, uid, password, 'blog.post', 'search_read', [[['id', '>', 0]]],
+            {'fields': [
+                'id',
+                'website_meta_title',
+                'website_meta_description',
+                'website_meta_keywords',
+                'is_published',
+                'name',
+                'subtitle',
+                'author_id',
+                'active',
+                'cover_properties',
+                'blog_id',
+                'content',
+                'teaser_manual',
+                'create_date',
+                'published_date',
+                'post_date',
+                'write_date',
+                'visits',
+                'tag_ids',
+            ]}):
+            Blog = self.env['blog.post'].search([('company_id', '=', COMPANY_ID), ('old_id', '=', oldBlog['id'])])
+            if Blog:
+                Blog.visits = oldBlog['visits']
+            else:
+                vals = {
+                    'company_id': COMPANY_ID,
+                    'old_id': oldBlog['id'],
+                    'website_meta_title': oldBlog['website_meta_title'],
+                    'website_meta_description': oldBlog['website_meta_description'],
+                    'website_meta_keywords': oldBlog['website_meta_keywords'],
+                    'is_published': oldBlog['is_published'],
+                    'name': oldBlog['name'],
+                    'subtitle': oldBlog['subtitle'],
+                    'author_id': self.env['res.partner'].search([('company_id', '=', COMPANY_ID), ('old_id', '=', oldBlog['author_id'][0])], limit=1).id,
+                    'active': oldBlog['active'],
+                    'cover_properties': oldBlog['cover_properties'],
+                    'blog_id': BLOG[oldBlog['blog_id'][0]],
+                    'content': oldBlog['content'],
+                    'teaser_manual': oldBlog['teaser_manual'],
+                    'create_date': oldBlog['create_date'],
+                    'published_date': oldBlog['published_date'],
+                    'post_date': oldBlog['post_date'],
+                    'write_date': oldBlog['write_date'],
+                    'visits': oldBlog['visits'],
+                }
+                Blog = self.env['blog.post'].create(vals)
+                for tag_id in oldBlog['tag_ids']:
+                    sql = "INSERT INTO blog_post_blog_tag_rel (blog_tag_id, blog_post_id) VALUES (%s, %s);"
+                    self.env.cr.execute(sql, [BLOG_TAG[tag_id], Blog.id])
+        _logger.info("== END Guru Blog ==")
 
 
 
