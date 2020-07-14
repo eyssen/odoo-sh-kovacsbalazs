@@ -4,6 +4,12 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
 import xmlrpc.client
 import ssl
+import json
+from PIL import Image
+import io
+import base64
+from odoo.tools import config
+import requests
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -12,9 +18,48 @@ _logger = logging.getLogger(__name__)
 
 
 
+DEFAULT_IMAGE_TIMEOUT = 3
+DEFAULT_IMAGE_MAXBYTES = 10 * 1024 * 1024
+DEFAULT_IMAGE_CHUNK_SIZE = 32768
+
+
+
+
+
 class KblLoader(models.TransientModel):
     
     _name = 'kbl.loader'
+
+
+    def _import_image_by_url(self, url):
+        maxsize = int(config.get("import_image_maxbytes", DEFAULT_IMAGE_MAXBYTES))
+        _logger.debug("Trying to import image from URL: %s" % (url,))
+        try:
+            response = requests.Session().get(url, timeout=int(config.get("import_image_timeout", DEFAULT_IMAGE_TIMEOUT)))
+            response.raise_for_status()
+
+            if response.headers.get('Content-Length') and int(response.headers['Content-Length']) > maxsize:
+                raise ValueError(_("File size exceeds configured maximum (%s bytes)") % maxsize)
+
+            content = bytearray()
+            for chunk in response.iter_content(DEFAULT_IMAGE_CHUNK_SIZE):
+                content += chunk
+                if len(content) > maxsize:
+                    raise ValueError(_("File size exceeds configured maximum (%s bytes)") % maxsize)
+
+            image = Image.open(io.BytesIO(content))
+            w, h = image.size
+            if w * h > 42e6:  # Nokia Lumia 1020 photo resolution
+                raise ValueError(
+                    u"Image size excessive, imported images must be smaller "
+                    u"than 42 million pixel")
+
+            return base64.b64encode(content)
+        except Exception as e:
+            _logger.exception(e)
+            raise ValueError(_("Could not retrieve URL: %(url)s") % {
+                'url': url,
+            })
 
 
     def load_from_kbl(self):
@@ -164,7 +209,7 @@ class KblLoader(models.TransientModel):
                         vals['parent_id'] = ParentId.id
                     self.env['res.partner'].create(vals)
         _logger.info("== END KBL Partner ==")
-         
+          
         # project.task
         _logger.info("== START KBL Task ==")
         for oldTask in models.execute_kw(db, uid, password, 'project.task', 'search_read', [[['id', '>', 0]]],
@@ -218,7 +263,7 @@ class KblLoader(models.TransientModel):
                     vals['partner_id'] = Partner.id
                 self.env['project.task'].create(vals)
         _logger.info("== END KBL Task ==")
-         
+          
         # project.task.progress
         _logger.info("== START KBL Tevékenységek ==")
         for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
@@ -275,6 +320,21 @@ class KblLoader(models.TransientModel):
             if Blog:
                 Blog.visits = oldBlog['visits']
             else:
+                # Blog Image Start
+                cover_properties = json.loads(oldBlog['cover_properties'])
+                image_url = 'https://drkovacsbalazs.hu' + cover_properties['background-image'][4:-1]
+                image_vals = {
+                    'name': image_url.split('/')[-1].split('?')[0],
+                    'res_model': 'ir.ui.view',
+                    'res_id': 0,
+                    'type': 'binary',
+                    'datas': self._import_image_by_url(image_url)
+                }
+                Attachment = self.env['ir.attachment'].create(image_vals)
+                cover_properties['background-image'] = 'url(/web/image/' + str(Attachment.id) + '/' + image_vals['name'] + ')'
+                cover_properties['resize_class'] = "o_record_has_cover cover_mid"
+                oldBlog['cover_properties'] = json.dumps(cover_properties)
+                # Blog Image End
                 vals = {
                     'company_id': COMPANY_ID,
                     'old_id': oldBlog['id'],
@@ -1086,6 +1146,21 @@ class KblLoader(models.TransientModel):
             if Blog:
                 Blog.visits = oldBlog['visits']
             else:
+                # Blog Image Start
+                cover_properties = json.loads(oldBlog['cover_properties'])
+                image_url = 'https://drkovacsbalazs.hu' + cover_properties['background-image'][4:-1]
+                image_vals = {
+                    'name': image_url.split('/')[-1].split('?')[0],
+                    'res_model': 'ir.ui.view',
+                    'res_id': 0,
+                    'type': 'binary',
+                    'datas': self._import_image_by_url(image_url)
+                }
+                Attachment = self.env['ir.attachment'].create(image_vals)
+                cover_properties['background-image'] = 'url(/web/image/' + str(Attachment.id) + '/' + image_vals['name'] + ')'
+                cover_properties['resize_class'] = "o_record_has_cover cover_mid"
+                oldBlog['cover_properties'] = json.dumps(cover_properties)
+                # Blog Image End
                 vals = {
                     'company_id': COMPANY_ID,
                     'old_id': oldBlog['id'],
