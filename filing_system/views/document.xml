@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+
+
+
+
+		<!-- Top menu / dashboard icon -->
+		
+		<menuitem name="Iktató" id="menu_filing_system_root" web_icon="filing_system,static/description/icon.png"/>
+		<menuitem name="Beállítások" parent="menu_filing_system_root" id="menu_filing_system_config" sequence="10"/>
+
+
+
+
+
+		<!-- Filing Document -->
+
+		<record id="view_filing_document_form" model="ir.ui.view">
+			<field name="name">filing.document.form</field>
+			<field name="model">filing.document</field>
+			<field name="arch" type="xml">
+				<form string="Filing Document">
+					<sheet>
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only" />
+							<h1>
+								<field name="name" />
+							</h1>
+						</div>
+						<group>
+							<group>
+								<field name="number" />
+								<field name="mailbox_id" required="1" />
+								<field name="date" />
+							</group>
+							<group>
+								<field name="from_id" />
+								<field name="to_id" />
+								<field name="return_receipt" />
+							</group>
+							<label for="description" />
+							<field name="description" />
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_filing_document_tree" model="ir.ui.view">
+			<field name="name">filing.document.tree</field>
+			<field name="model">filing.document</field>
+			<field name="arch" type="xml">
+				<tree string="Filing Document">
+					<field name="number" />
+					<field name="name" />
+					<field name="mailbox_id" />
+					<field name="from_id" />
+					<field name="to_id" />
+					<field name="date" />
+					<field name="return_receipt" />
+				</tree>
+			</field>
+		</record>
+
+		<record id='filing_document_action' model='ir.actions.act_window'>
+			<field name="name">Dokumentumok</field>
+			<field name="res_model">filing.document</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="filing_document_action" parent="menu_filing_system_root" id="menu_filing_document" sequence="1" />
+
+
+
+
+
+		<!-- Filing Mailbox -->
+
+		<record id="view_filing_mailbox_tree" model="ir.ui.view">
+			<field name="name">filing.mailbox.tree</field>
+			<field name="model">filing.mailbox</field>
+			<field name="arch" type="xml">
+				<tree string="Filing Mailbox" editable="top">
+					<field name="name" />
+					<field name="sequence_id" />
+					<field name="default_from_id" />
+					<field name="default_to_id" />
+					<field name="qty" />
+				</tree>
+			</field>
+		</record>
+
+		<record id='filing_mailbox_action' model='ir.actions.act_window'>
+			<field name="name">Postafiókok</field>
+			<field name="res_model">filing.mailbox</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem action="filing_mailbox_action" parent="menu_filing_system_config" id="menu_filing_mailbox" sequence="1" />
+
+
+
+
+
+		<!-- Documents -->
+
+		<record id="res_config_settings_view_form" model="ir.ui.view">
+			<field name="name">res.config.settings.view.form.inherit.documents</field>
+			<field name="model">res.config.settings</field>
+			<field name="priority" eval="70"/>
+			<field name="inherit_id" ref="base.res_config_settings_view_form"/>
+			<field name="arch" type="xml">
+			
+	            <xpath expr="//div[hasclass('o_documents_block')]" position="attributes">
+	                <attribute name="invisible">0</attribute>
+	            </xpath>
+	            
+	            <xpath expr="//div[hasclass('o_documents_block')]" position="inside">
+	                <div class="row mt16 o_settings_container">
+	                    <div class="col-xs-12 col-md-6 o_setting_box">
+	                        <div class="o_setting_left_pane">
+	                            <field name="documents_filing_settings"/>
+	                        </div>
+	                        <div class="o_setting_right_pane o_documents_right_pane">
+	                            <label for="documents_filing_settings"/>
+	                            <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+	                            <div class="row">
+	                                <div class="text-muted col-md-12">
+	                                    Centralize files attached to filings
+	                                </div>
+	                            </div>
+	                            <div class="content-group" attrs="{'invisible' : [('documents_filing_settings', '=', False)]}">
+	                                <div class="row mt16">
+	                                    <label class="o_form_label col-lg-3" for="filing_folder" string="Workspace"/>
+	                                   <field name="filing_folder" attrs="{'required' : [('documents_filing_settings', '=', True)]}"/>
+	                                </div>
+	                                <div class="row">
+	                                    <label class="o_form_label col-lg-3" for="filing_tags" string="Default Tags"/>
+	                                   <field name="filing_tags" widget="many2many_tags" domain="[('folder_id','=', filing_folder)]"/>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </xpath>
+
+			</field>
+		</record>
+
+
+
+
+
+	</data>
+</odoo>

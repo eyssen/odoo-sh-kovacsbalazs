@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+filing_document_access_right_user,filing_document_access_right_user,model_filing_document,filing_group_user,1,1,1,0
+filing_document_access_right_manager,filing_document_access_right_manager,model_filing_document,filing_group_manager,1,1,1,1
+filing_mailbox_access_right_user,filing_mailbox_access_right_user,model_filing_mailbox,filing_group_user,1,0,0,0
+filing_mailbox_access_right_manager,filing_mailbox_access_right_manager,model_filing_mailbox,filing_group_manager,1,1,1,1
