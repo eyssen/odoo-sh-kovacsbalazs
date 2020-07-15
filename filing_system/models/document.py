@@ -21,6 +21,7 @@ class FilingDocument(models.Model):
     date = fields.Date(u'Időpont')
     description = fields.Text(u'Leírás')
     return_receipt = fields.Char(u'Tértivevény')
+    company_id = fields.Many2one('res.company', 'Company', index=True)
 
 
     _sql_constraints = [
@@ -66,6 +67,7 @@ class FilingMailbox(models.Model):
     default_from_id = fields.Many2one('res.partner', u'Alapértelmezett feladó')
     default_to_id = fields.Many2one('res.partner', u'Alapértelmezett címzett')
     qty = fields.Integer(u'Darabszám', readonly=True)
+    company_id = fields.Many2one('res.company', 'Company', index=True)
 
 
 
