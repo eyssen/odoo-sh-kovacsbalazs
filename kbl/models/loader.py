@@ -18,7 +18,7 @@ _logger = logging.getLogger(__name__)
 
 
 
-DEFAULT_IMAGE_TIMEOUT = 3
+DEFAULT_IMAGE_TIMEOUT = 20
 DEFAULT_IMAGE_MAXBYTES = 10 * 1024 * 1024
 DEFAULT_IMAGE_CHUNK_SIZE = 32768
 
@@ -294,7 +294,7 @@ class KblLoader(models.TransientModel):
 
         # blog.post
         _logger.info("== START KBL Blog ==")
-        for oldBlog in models.execute_kw(db, uid, password, 'blog.post', 'search_read', [[['id', '>', 0]]],
+        for oldBlog in models.execute_kw(db, uid, password, 'blog.post', 'search_read', [[['website_published', '!=', False]]],
             {'fields': [
                 'id',
                 'website_meta_title',
@@ -566,7 +566,7 @@ class KblLoader(models.TransientModel):
                         vals['parent_id'] = ParentId.id
                     self.env['res.partner'].create(vals)
         _logger.info("== END Guru Partner ==")
-          
+           
         # project.task
         _logger.info("== START Guru Task ==")
         for oldTask in models.execute_kw(db, uid, password, 'project.task', 'search_read', [[['project_id', 'not in', [12, 14]], ['id', '>', 0]]],
@@ -932,7 +932,7 @@ class KblLoader(models.TransientModel):
                     vals['kmok_state'] = oldTask['kmok_state'][0]
                 self.env['project.task'].create(vals)
         _logger.info("== END Guru Task ==")
-  
+   
         # project.task.progress
         _logger.info("== START Guru Tevékenységek ==")
         for oldProgress in models.execute_kw(db, uid, password, 'project.task.progress', 'search_read', [[['id', '>', 0]]],
@@ -960,7 +960,7 @@ class KblLoader(models.TransientModel):
                 if vals['task_id']:
                     self.env['project.task.progress'].create(vals)
         _logger.info("== END Guru Tevékenységek ==")
-          
+           
         # account.analytic.line
         _logger.info("== START Guru Munkaidő-beosztás ==")
         for oldLine in models.execute_kw(db, uid, password, 'account.analytic.line', 'search_read', [[['project_id', 'not in', [12, 14]], ['project_id', '!=', False]]],
@@ -993,7 +993,7 @@ class KblLoader(models.TransientModel):
                     vals['user_id'] = self.env['res.users'].search([('old_id', '=', oldLine['user_id'][0])], limit=1).id
                 self.env['account.analytic.line'].create(vals)
         _logger.info("== END Guru Munkaidő-beosztás ==")
-  
+   
         # hr.employee.wage
         _logger.info("== START Guru Employee Wage ==")
         for oldWage in models.execute_kw(db, uid, password, 'hr.employee.wage', 'search_read', [[['id', '>', 0]]],
@@ -1041,7 +1041,7 @@ class KblLoader(models.TransientModel):
                 }
                 self.env['hr.employee.wage'].create(vals)
         _logger.info("== END Guru Employee Wage ==")
- 
+  
         # project.task.meeting.log
         _logger.info("== START Guru Meeting Log ==")
         for oldLog in models.execute_kw(db, uid, password, 'project.task.meeting.log', 'search_read', [[['id', '>', 0]]],
@@ -1067,7 +1067,7 @@ class KblLoader(models.TransientModel):
                     vals['file1'] = oldLog['file1']
                 self.env['project.task.meeting.log'].create(vals)
         _logger.info("== STOP Guru Meeting Log ==")
- 
+  
         # project.task.wage
         _logger.info("== START Guru Task Wage ==")
         for oldWage in models.execute_kw(db, uid, password, 'project.task.wage', 'search_read', [[['id', '>', 0]]],
@@ -1120,7 +1120,7 @@ class KblLoader(models.TransientModel):
 
         # blog.post
         _logger.info("== START Guru Blog ==")
-        for oldBlog in models.execute_kw(db, uid, password, 'blog.post', 'search_read', [[['id', '>', 0]]],
+        for oldBlog in models.execute_kw(db, uid, password, 'blog.post', 'search_read', [[['website_published', '!=', False]]],
             {'fields': [
                 'id',
                 'website_meta_title',
